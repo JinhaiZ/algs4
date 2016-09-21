@@ -18,6 +18,7 @@ Percolation问题：在一个平面被分为相等大小的N×N个正方形块�
    private int n;
 ```
 首先是类变量的声明，比较tricky的是，需要声明两个UnionFind类，一个用来判断系统是否percolate，一个用来判断某一个正方形块是否**被填满**。初始化时，第一个UnionFind类中，假想的两个节点分别与第一排与最后一排正方形块链接，而第二个UnionFind类中，只有第一个假想的节点与第一排正方形块链接。因为在判断系统是否percolate时，我们只需要判断两个假想节点是否相连而判断某个正方形块是否**被填满**时，我们需要判断该正方形块是否与第一个假想节点相连且该节点是**打开**的。
+
 ```java
    public Percolation(int n) {
        if (n <= 0) {
@@ -37,7 +38,9 @@ Percolation问题：在一个平面被分为相等大小的N×N个正方形块�
        openSite = new boolean[n][n];
    }
 ```
+
 接着是构造函数，根据上面的说明，我们依次初始化两个UnionFind类。
+
 ```java
    public boolean isOpen(int i, int j) {
        testRange(i, j, this.n);
@@ -48,6 +51,7 @@ Percolation问题：在一个平面被分为相等大小的N×N个正方形块�
 判断正方形块是否**打开**只需查询下二位boolean数组的值就好了，下面两个函数稍微有些复杂
 
 >判断系统是否percolate时，我们只需要判断两个假想节点是否相连
+
 ```java
 public boolean percolates() {
        if (this.n == 1) {
@@ -56,13 +60,17 @@ public boolean percolates() {
        return map.connected(0, n*n+1);
    }
 ```
+
 >判断某个正方形块是否**被填满**时，我们需要判断该正方形块是否与第一个假想节点相连且该节点是**打开**的
+
 ```java
    public boolean isFull(int i, int j) {
        testRange(i, j, this.n);
        return full.connected(0, (i-1)*n+(j-1)+1) && isOpen(i, j);
 ```
+
 在判断某个正方形块是否**被填满**时，有个tricky的点是，当系统只有1×1大小时，经过我们初始化后的系统便是perolate的，因为第一排和最后一排重合，此时假想的两个点也当然相连了。因此我们需要单独判断这种情况。
+
 ```java
    public void open(int i, int j) {
        testRange(i, j, this.n);
@@ -93,4 +101,36 @@ public boolean percolates() {
        }
    }
 ```
+
 接着是open函数，根据相连正方形块是否打开，union函数可能被执行0至4次，这个也比较好理解。
+
+下面是进行Monte Carlo Simulation的PercolationStats类
+```java
+   public PercolationStats(int n, int trials) {
+       if ((n <= 0) || (trials <= 0)) {
+           throw new IllegalArgumentException();
+       }
+
+       this.count = new double[trials];
+       this.trials = trials;
+       for (int i = 0; i < trials; i++) {
+           Percolation test = new Percolation(n);
+           int counter = 0;
+
+           while(!test.percolates()) {
+               int rand = StdRandom.uniform(0, n*n);
+               int row = rand/n;
+               int col = rand % n;
+               if (!test.isOpen(row+1, col+1)) {    
+                   test.open(row+1, col+1);
+                   counter += 1;
+               }
+           }                    
+           count[i] = (double) counter/(double) (n*n);
+       }
+       this.mean = StdStats.mean(this.count);
+       this.stddev = StdStats.stddev(this.count);   
+   }
+```
+
+关于该类API的定义，[问题描述](http://coursera.cs.princeton.edu/algs4/assignments/percolation.html)里都阐述的比较清楚，这里比较tricky的一点是，随机选取正方形块打开时，只有在正方形块前状态是关闭时才算做一次打开并计入次数。也就是说，两次随机选取了一样的正方形块打开只能算作一次。
