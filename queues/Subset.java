@@ -12,7 +12,7 @@ public class Subset {
             test.enqueue(str);
         }
 
-        for (int i = 0; i < k; i ++) {
+        for (int i = 0; i < k; i++) {
             StdOut.println(test.dequeue());
         }
     }

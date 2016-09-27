@@ -7,9 +7,9 @@ public class Deque<Item> implements Iterable<Item> {
     private int size;
     
     public class Node {
-        Item data;
-        Node next;
-        Node prev;
+        private Item data;
+        private Node next;
+        private Node prev;
         public Node(Item data) {
             this.data = data;
             this.next = null;
@@ -105,7 +105,7 @@ public class Deque<Item> implements Iterable<Item> {
     private class DequeIterator implements Iterator<Item> {
         private Node current = first;
         
-        public boolean hasNext(){
+        public boolean hasNext() {
             return current != null;
         }
         public void remove() {
@@ -127,8 +127,8 @@ public class Deque<Item> implements Iterable<Item> {
             throw new java.lang.NullPointerException("attemps to add null"); 
         }
     }
-    private void checkRemove(int size) {
-        if (size < 1) {
+    private void checkRemove(int s) {
+        if (s < 1) {
             throw new java.util.NoSuchElementException("empty deque");
         }
     }
@@ -144,7 +144,7 @@ public class Deque<Item> implements Iterable<Item> {
         test.addFirst(4);
         test.addLast(4);
         Iterator<Integer> i = test.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             StdOut.println(i.next());
         }
     }

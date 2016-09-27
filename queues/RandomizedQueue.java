@@ -1,6 +1,4 @@
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.lang.NullPointerException;
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -55,7 +53,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
             this.size -= 1;
         }
         this.array[this.size] = null;
-        if ( this.size >0 && this.size == this.array.length/4 ) {
+        if (this.size > 0 && this.size == this.array.length/4) {
             resize(this.array.length/2);
         }
         return removed;
@@ -80,7 +78,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         private int current = 0;
         private int[] ind = new int[size];
         {
-        for(int i = 0;i < ind.length; i++) {
+        for (int i = 0; i < ind.length; i++) {
             ind[i] = i;
         }
         StdRandom.shuffle(ind);
@@ -111,7 +109,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         test.enqueue(5);
         test.enqueue(6);
         Iterator<Integer> i = test.iterator();
-        while(i.hasNext()) {
+        while (i.hasNext()) {
             StdOut.println(i.next());
         } 
     }  
