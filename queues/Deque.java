@@ -1,4 +1,5 @@
 import java.util.Iterator;
+import edu.princeton.cs.algs4.StdOut;
 
 public class Deque<Item> implements Iterable<Item> {
     private Node first;
@@ -23,11 +24,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
         // construct an empty deque
     public boolean isEmpty() {
-        if (this.size == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return (this.size == 0);
     }
         // is the deque empty?
     public int size() {
@@ -115,9 +112,9 @@ public class Deque<Item> implements Iterable<Item> {
             throw new java.lang.UnsupportedOperationException("iterator rm");
         }
         public Item next() {
-            Item item = current.data;
-            current = current.next;
             if (current != null) {
+                Item item = current.data;
+                current = current.next;
                 return item;
             } else {
                 throw new java.util.NoSuchElementException("no more item");
@@ -137,5 +134,18 @@ public class Deque<Item> implements Iterable<Item> {
     }
     public static void main(String[] args) {
         // unit testing
+        Deque<Integer> test = new Deque<Integer>();
+        test.addFirst(1);
+        test.addLast(1);
+        test.addFirst(2);
+        test.addLast(2);
+        test.addFirst(3);
+        test.addLast(3);
+        test.addFirst(4);
+        test.addLast(4);
+        Iterator<Integer> i = test.iterator();
+        while(i.hasNext()) {
+            StdOut.println(i.next());
+        }
     }
 }
