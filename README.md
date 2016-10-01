@@ -1,8 +1,61 @@
 # Algorithms PartI by Princeton University
+
 这个Repo是我在Coursera上[《普林斯顿大学算法课I》](https://www.coursera.org/learn/introduction-to-algorithms/)时的课程作业，本Repo也会根据我在Cousera上的进度而持续跟进，希望我的作业能对大家在学习这门课时有所帮助，也欢迎大家在issue's上一起讨论问题。
+
 ##  [Programming Assignment 1: Percolation](http://coursera.cs.princeton.edu/algs4/assignments/percolation.html)
-### UnionFind问题
-待完成。。。
+
+### Dynamic Connectivity问题
+Dynamic Connectivity问题简单来说就是图论中判断两个点是否存在一条通路。在研究这个问题时，我们先定义点的集合，以及对集合的两种操作Union和Find。
+
+#### 点的集合
+点以正整数，0，1，2，3，...来表示。点的集合以花括号表示。列入 {0，1，2} {3，4} 表示点0，1和2在一个集合里，点3，4在另一个集合里。
+
+#### 对集合的操作
+* Union(x, y): 连接x点和y点，返回值void
+* Find(x, y): x点和y点存在一条通路吗，如果点x和y在一个集合里，那么返回true否则返回false
+
+#### 例子
+* 初始点集合: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}
+* Union(0,1) => {0, 1}, 2, 3, 4, 5, 6, 7, 8
+* Union(1,2) => {0, 1, 2}, 3, 4, 5, 6, 7, 8
+* Find(1,3) => return **False**
+* Union(1,3) => => {0, 1, 2, 3}, 4, 5, 6, 7, 8
+* Find(1.3) => return **True**
+
+#### 算法 QuickUnion
+
+* 数据结构采用一个长度为N的数组，数组的index表示点，相应的值表示属于哪个集合，初始化时，每个点都属于自己的集合
+* Union
+* Find
+```java
+public class QuickFindUF {
+    private int[] id;
+    //构造函数，数组元素初始化为其index值 O(N)
+    public QuickFindUF(int N) {
+        id = new int[N];
+        for (int i = 0; i < N; i++) {
+            id[i] = i;
+        }
+    }
+    // Find方法 O(1)
+    public boolean connected(int p, int q) {
+        return id[p] == id[q];
+    }
+    // Union方法 O(N)
+    public void union(int p, int q) {
+        int pid = id[p];
+        int qid = id[q];
+        for (int i = 0; i < id.length; i++) {
+            if (id[i] == pid) id[i] = qid;
+        }
+    }
+}
+```
+
+#### 算法 QuickFind
+#### 改进
+
+
 ### Percolation问题
 Percolation问题：在一个平面被分为相等大小的N×N个正方形块，每一块有三种可能状态：**关闭**，**打开**和**被填满**。只有**打开**的正方形块才有可能**被填满**，**打开**的正方形块**被填满**的条件是：*该打开的正方形块的上方，左方或者右方有被填满的正方形块*。现假设任意一个正方形块由关闭到打开的概率为**P**，且只要第一排正方形块被**打开**的同时就会**被填满**，就好像水从第一排正方形块要向下通过打开的正方形块一只流到最后一排那样，问概率**P**为多少时，我们几乎可以确定最后一排中有**被填满**的正方形块，如果水能从第一排打开的正方形块一只流到最后一排打开的正方形块上，我们就说这个系统是percolate的。
 
